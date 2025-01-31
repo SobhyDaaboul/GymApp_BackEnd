@@ -5,5 +5,6 @@ exports.bookClass = async (req, res) => {
     console.log("body", body);
   } catch (error) {
     throw new Error(error);
+    //add
   }
 };
