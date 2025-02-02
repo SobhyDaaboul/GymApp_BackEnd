@@ -1,7 +1,10 @@
 const router = require("express").Router();
 
-const memberController = require("../controllers/memberController");
+const MembershipController = require("../controllers/membershipController");
 
-router.post("/member", memberController.create);
+router.post("/membership", MembershipController.createMembership);
+router.get("/membership", MembershipController.getAllMemberships);
+router.get("/membership/:id", MembershipController.getMembershipById);
+router.delete("/membership/:id", MembershipController.deleteMembership);
 
 module.exports = router;

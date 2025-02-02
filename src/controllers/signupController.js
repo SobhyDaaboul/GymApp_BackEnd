@@ -6,26 +6,27 @@ class SignupController {
     try {
       const { name, email, password } = req.body;
 
-      Member.findByEmail(email, async (err, existingMember) => {
-        if (err) return res.status(500).json({ message: "Server error" });
+      // Input validation (example)
+      if (!name || !email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
 
-        if (existingMember)
-          return res.status(400).json({ message: "Email already in use" });
+      const existingMember = await Member.findByEmail(email);
+      if (existingMember) {
+        return res.status(400).json({ message: "Email already in use" });
+      }
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+      // Hash password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Store member
-        Member.createMember(name, email, hashedPassword, (err, memberId) => {
-          if (err) return res.status(500).json({ message: "Server error" });
-
-          res
-            .status(201)
-            .json({ message: "Member registered successfully", memberId });
-        });
-      });
+      // Store member
+      const memberId = await Member.createMember(name, email, hashedPassword);
+      res
+        .status(201)
+        .json({ message: "Member registered successfully", memberId });
     } catch (error) {
+      console.error(error); // Log the error for debugging
       res.status(500).json({ message: "Server error" });
     }
   }

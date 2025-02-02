@@ -5,18 +5,26 @@ require("dotenv").config();
 
 class LoginController {
   static async login(req, res) {
-    const { email, password } = req.body;
+    try {
+      const { email, password } = req.body;
 
-    Member.findByEmail(email, async (err, member) => {
-      if (err) return res.status(500).json({ message: "Server error" });
+      // Input validation
+      if (!email || !password) {
+        return res
+          .status(400)
+          .json({ message: "Email and password are required" });
+      }
 
-      if (!member)
+      const member = await Member.findByEmail(email);
+      if (!member) {
         return res.status(400).json({ message: "Invalid email or password" });
+      }
 
       // Compare hashed password
       const isMatch = await bcrypt.compare(password, member.password);
-      if (!isMatch)
+      if (!isMatch) {
         return res.status(400).json({ message: "Invalid email or password" });
+      }
 
       // Generate JWT token
       const token = jwt.sign({ memberId: member.id }, process.env.JWT_SECRET, {
@@ -24,7 +32,10 @@ class LoginController {
       });
 
       res.json({ message: "Login successful", token });
-    });
+    } catch (error) {
+      console.error(error); // Log the error for debugging
+      res.status(500).json({ message: "Server error" });
+    }
   }
 }
 
