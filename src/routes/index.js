@@ -1,10 +1,10 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
-const classRoute = require("./class");
-const loginRoute = require("./login");
+const Member_gymclassRoute = require("./Member_gymclassRoutes");
+const signupRoutes = require("./SignUpRoutes");
+const loginRoutes = require("./loginRoutes");
 
-router.use("/class", classRoute);
-router.use("/login", loginRoute);
+router.use("/class", Member_gymclassRoute);
+router.use();
 
 module.exports = router;
