@@ -1,36 +1,49 @@
-const bcrypt = require("bcryptjs");
-const Member = require("../models/Member");
+const Member = require("../models/MemberModel");
 
 class SignupController {
   static async signup(req, res) {
     try {
-      const { name, email, password } = req.body;
+      const { name, phoneNumber, email, password } = req.body;
 
-      // Input validation (example)
-      if (!name || !email || !password) {
+      // Input validation
+      if (!name || !phoneNumber || !email || !password) {
         return res.status(400).json({ message: "All fields are required" });
       }
 
-      const existingMember = await Member.findByEmail(email);
-      if (existingMember) {
-        return res.status(400).json({ message: "Email already in use" });
-      }
+      // Check if the email already exists
+      Member.findByEmail(email, (err, results) => {
+        if (err) {
+          return res.status(500).json({ message: "Server error", error: err });
+        }
 
-      // Hash password
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
+        if (results.length > 0) {
+          return res.status(400).json({ message: "Email already registered" });
+        }
 
-      // Store member
-      const memberId = await Member.createMember(name, email, hashedPassword);
+        // Create new member
+        const newMember = {
+          name,
+          phoneNumber,
+          email,
+          password, // Password as plain text (you might want to hash this)
+          isLoggedIn: 0,
+        };
 
-      // Mark the user as logged in (optional, if you want to update `isLoggedIn` in the database immediately)
-      await Member.updateLoginStatus(email, 1); // Update isLoggedIn to 1 after sign-up
+        Member.create(newMember, (err, results) => {
+          if (err) {
+            return res
+              .status(500)
+              .json({ message: "Error creating member", error: err });
+          }
 
-      res
-        .status(201)
-        .json({ message: "Member registered successfully", memberId });
+          res.status(201).json({
+            message: "Member created successfully",
+            memberId: results.insertId,
+          });
+        });
+      });
     } catch (error) {
-      console.error(error); // Log the error for debugging
+      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   }
