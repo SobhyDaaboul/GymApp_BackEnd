@@ -1,7 +1,12 @@
-const Payment = require("../models//PaymentModel");
+const Payment = require("../models/PaymentModel");
 
 const PaymentController = {
   createPayment: (req, res) => {
+    // Check if the user is logged in
+    if (!req.user || !req.user.isLoggedIn) {
+      return res.status(401).json({ message: "Please log in first" });
+    }
+
     Payment.create(req.body, (err, results) => {
       if (err) return res.status(500).json(err);
       res.status(201).json(results);
@@ -26,6 +31,11 @@ const PaymentController = {
   },
 
   deletePayment: (req, res) => {
+    // Check if the user is logged in
+    if (!req.user || !req.user.isLoggedIn) {
+      return res.status(401).json({ message: "Please log in first" });
+    }
+
     const id = req.params.id;
     Payment.delete(id, (err, results) => {
       if (err) return res.status(500).json(err);

@@ -1,7 +1,13 @@
 const Membership = require("../models/MembershipModel");
+const isLoggedIn = require("../controllers/isLoggedIn");
 
 const MembershipController = {
   createMembership: (req, res) => {
+    // Check if the user is logged in
+    if (!req.user || !req.user.isLoggedIn) {
+      return res.status(401).json({ message: "Please log in first" });
+    }
+
     Membership.create(req.body, (err, results) => {
       if (err) return res.status(500).json(err);
       res.status(201).json(results);
@@ -26,6 +32,11 @@ const MembershipController = {
   },
 
   deleteMembership: (req, res) => {
+    // Check if the user is logged in
+    if (!req.user || !req.user.isLoggedIn) {
+      return res.status(401).json({ message: "Please log in first" });
+    }
+
     const id = req.params.id;
     Membership.delete(id, (err, results) => {
       if (err) return res.status(500).json(err);
