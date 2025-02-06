@@ -2,9 +2,46 @@ const Member = require("../models/MemberModel");
 
 const MemberController = {
   createMember: (req, res) => {
-    Member.create(req.body, (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.status(201).json(results);
+    // Validate required fields
+    const { name, phoneNumber, email, password } = req.body;
+
+    // Check if any required field is missing
+    if (!name || !phoneNumber || !email || !password) {
+      return res.status(400).json({
+        message: "All fields (name, phone, email, password) are required",
+      });
+    }
+
+    // Check if email already exists
+    Member.getByEmail(email, (err, results) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Error checking email",
+          error: err,
+        });
+      }
+
+      if (results.length > 0) {
+        return res.status(400).json({
+          message: "Email is already registered",
+        });
+      }
+
+      // Add isLoggedIn field with value 0 (not logged in)
+      const memberData = { ...req.body, isLoggedIn: 0 };
+
+      // Proceed to create the member if email doesn't exist
+      Member.create(memberData, (err, results) => {
+        if (err)
+          return res.status(500).json({
+            message: "Error creating member",
+            error: err,
+          });
+        res.status(201).json({
+          message: "Member created successfully",
+          id: results.insertId,
+        });
+      });
     });
   },
 
