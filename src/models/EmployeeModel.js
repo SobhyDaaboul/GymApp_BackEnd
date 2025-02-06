@@ -2,7 +2,10 @@ const db = require("../config/db");
 
 const Employee = {
   getAll: (callback) => {
-    db.query("SELECT * FROM employee", callback);
+    db.query(
+      "SELECT name, phone, schedule, rate, description, image FROM employee",
+      callback
+    );
   },
 
   getById: (id, callback) => {

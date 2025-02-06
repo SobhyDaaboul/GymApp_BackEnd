@@ -1,10 +1,10 @@
 const router = require("express").Router();
 
-const employeeRoutes = require("./EmployeeRoutes");
-const membershipRoutes = require("./MembershipRoutes");
-const memberRoutes = require("./MemberRoutes");
+const employeeRoutes = require("./employeeRoutes");
+const membershipRoutes = require("./membershipRoutes");
+const memberRoutes = require("./memberRoutes");
 const memberGymClassRoutes = require("./Member_gymclassRoutes");
-const paymentRoutes = require("./PaymentRoutes");
+const paymentRoutes = require("./paymentRoutes");
 const gymClassRoutes = require("./ClassRoutes");
 
 // Mounting the routes
