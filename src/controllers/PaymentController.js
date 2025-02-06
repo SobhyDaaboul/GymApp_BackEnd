@@ -1,4 +1,4 @@
-const Payment = require("../models/PaymentModel");
+const Payment = require("../models//PaymentModel");
 
 const PaymentController = {
   createPayment: (req, res) => {
