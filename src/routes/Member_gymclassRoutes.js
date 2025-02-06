@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const MemberGymClassController = require("../controllers/MemberGymClassControllerController");
+const MemberGymClassController = require("../controllers/MemberGymClassController");
 
 router.post(
   "/member-gymclasses",

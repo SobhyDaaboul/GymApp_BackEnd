@@ -1,5 +1,5 @@
 const db = require("../config/db");
-const Membership = require("./Membership");
+const Membership = require("./MembershipModel");
 const PaymentMethod = require("./PaymentMethodModel");
 
 const Payment = {
