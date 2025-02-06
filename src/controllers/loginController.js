@@ -40,6 +40,9 @@ class LoginController {
         return res.status(400).json({ message: "Invalid email or password" });
       }
 
+      // Mark the user as logged in (optional, if you want to update `isLoggedIn` in the database)
+      await Member.updateLoginStatus(email, 1); // Assuming you have this method in your model
+
       // Generate JWT token
       const token = jwt.sign(
         { memberId: member.member_id },

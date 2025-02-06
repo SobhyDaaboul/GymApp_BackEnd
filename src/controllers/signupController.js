@@ -22,6 +22,10 @@ class SignupController {
 
       // Store member
       const memberId = await Member.createMember(name, email, hashedPassword);
+
+      // Mark the user as logged in (optional, if you want to update `isLoggedIn` in the database immediately)
+      await Member.updateLoginStatus(email, 1); // Update isLoggedIn to 1 after sign-up
+
       res
         .status(201)
         .json({ message: "Member registered successfully", memberId });
