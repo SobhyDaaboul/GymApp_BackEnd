@@ -1,7 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const classController = require("../controllers/classController");
+const router = require("express").Router;
+const classController = require("../controllers/ClassController");
 
-router.get("/class", classController.getAll);
+router.get("/class", classController.getAllClasses);
 
 module.exports = router;
