@@ -1,5 +1,7 @@
-const router = require("express").Router;
+const express = require("express");
 const classController = require("../controllers/ClassController");
+
+const router = express.Router();
 
 router.get("/class", classController.getAllClasses);
 
