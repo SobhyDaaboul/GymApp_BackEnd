@@ -3,7 +3,7 @@ const Class = require("../models/ClassModel");
 const ClassController = {
   createClass: (req, res) => {
     const classData = req.body;
-    GymClass.create(classData, (err, result) => {
+    Class.create(classData, (err, result) => {
       if (err) return res.status(500).json(err);
       res
         .status(201)
@@ -12,14 +12,14 @@ const ClassController = {
   },
 
   getAllClasses: (req, res) => {
-    GymClass.getAll((err, results) => {
+    Class.getAll((err, results) => {
       if (err) return res.status(500).json(err);
       res.json(results);
     });
   },
 
   getSpecificClassData: (req, res) => {
-    GymClass.getSpecificClassData((err, results) => {
+    Class.getSpecificClassData((err, results) => {
       if (err) {
         console.error("Error fetching specific class data:", err);
         return res
