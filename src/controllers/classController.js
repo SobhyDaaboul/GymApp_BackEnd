@@ -1,5 +1,4 @@
 const Class = require("../models/ClassModel");
-const Member = require("../models/MemberModel");
 
 const ClassController = {
   createClass: (req, res) => {

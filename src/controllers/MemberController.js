@@ -1,25 +1,61 @@
 const Member = require("../models/MemberModel");
 
 class MemberController {
+  // Get all members
+  static async getAllMembers(req, res) {
+    try {
+      Member.findAll((err, results) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error fetching members", error: err });
+        }
+        res.json({ message: "Members retrieved successfully", data: results });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+
+  // Get member by ID
   static async getMemberById(req, res) {
     try {
-      const memberId = req.params.id; // Assuming the member ID is passed as a parameter
-
+      const memberId = req.params.id;
       Member.findById(memberId, (err, results) => {
         if (err) {
           return res
             .status(500)
             .json({ message: "Error fetching member data", error: err });
         }
-
-        if (results.length === 0) {
+        if (!results || results.length === 0) {
           return res.status(404).json({ message: "Member not found" });
         }
-
         res.json({
           message: "Member data retrieved successfully",
           data: results[0],
         });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+
+  // Delete member by ID
+  static async deleteMember(req, res) {
+    try {
+      const memberId = req.params.id;
+      Member.deleteById(memberId, (err, results) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error deleting member", error: err });
+        }
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ message: "Member not found" });
+        }
+        res.json({ message: "Member deleted successfully" });
       });
     } catch (error) {
       console.error(error);

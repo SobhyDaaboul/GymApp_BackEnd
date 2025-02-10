@@ -3,7 +3,7 @@ const db = require("../config/db"); // Assuming your database connection is set 
 const Member = {
   // Check if email exists
   findByEmail: (email, callback) => {
-    const query = "SELECT * FROM members WHERE email = ?";
+    const query = "SELECT * FROM member WHERE email = ?";
 
     db.query(query, [email], (err, results) => {
       if (err) {
@@ -16,7 +16,7 @@ const Member = {
   // Create new member
   create: (memberData, callback) => {
     const query =
-      "INSERT INTO members (name, phoneNumber, email, password, isLoggedIn) VALUES (?, ?, ?, ?, ?)";
+      "INSERT INTO member (name, phoneNumber, email, password, isLoggedIn) VALUES (?, ?, ?, ?, ?)";
 
     db.query(
       query,
@@ -38,9 +38,29 @@ const Member = {
 
   // Fetch member by ID (optional)
   findById: (id, callback) => {
-    const query = "SELECT * FROM members WHERE id = ?";
+    const query = "SELECT * FROM member WHERE id = ?";
 
     db.query(query, [id], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
+
+  deleteById(memberId, callback) {
+    const query = "DELETE FROM member WHERE id = ?";
+    db.query(query, [memberId], (err, results) => {
+      if (err) {
+        return callback(err, null);
+      }
+      callback(null, results);
+    });
+  },
+
+  updateLoginStatus(memberId, status, callback) {
+    const query = "UPDATE member SET isLoggedIn = ? WHERE member_id = ?";
+    db.query(query, [status, memberId], (err, results) => {
       if (err) {
         return callback(err, null);
       }

@@ -22,14 +22,28 @@ class LoginController {
           return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        // Compare the password with the stored one (assuming passwords are stored as plain text)
         const member = results[0];
+
         if (member.password !== password) {
           return res.status(400).json({ message: "Invalid email or password" });
         }
 
-        // Login successful
-        res.json({ message: "Login successful", memberId: member.id });
+        // Update login status
+        Member.updateLoginStatus(
+          member.member_id,
+          1,
+          (updateErr, updateResults) => {
+            if (updateErr) {
+              return res.status(500).json({
+                message: "Error updating login status",
+                error: updateErr,
+              });
+            }
+
+            // Login successful
+            res.json({ message: "Login successful", memberId: member.id });
+          }
+        );
       });
     } catch (error) {
       console.error(error);
