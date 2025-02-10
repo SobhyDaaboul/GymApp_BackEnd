@@ -7,5 +7,6 @@ router.get("/", MemberController.getAllMembers);
 router.get("/:id", MemberController.getMemberById);
 router.get("/email/:email", MemberController.getMemberByEmail);
 router.delete("/:id", MemberController.deleteMember);
+router.get("/specific", MemberController.getMembers);
 
 module.exports = router;

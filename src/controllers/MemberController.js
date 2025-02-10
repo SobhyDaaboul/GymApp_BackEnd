@@ -79,6 +79,28 @@ class MemberController {
       res.status(500).json({ message: "Server error" });
     }
   }
+
+  static async getMembers(req, res) {
+    try {
+      Member.findMembers((err, results) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error fetching members", error: err });
+        }
+        // Ensuring results is returned as an array
+        if (!Array.isArray(results)) {
+          return res
+            .status(500)
+            .json({ message: "Expected array response from database" });
+        }
+        res.json({ message: "Members retrieved successfully", data: results });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  }
 }
 
 module.exports = MemberController;
