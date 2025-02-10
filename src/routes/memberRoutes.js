@@ -6,5 +6,6 @@ const MemberController = require("../controllers/MemberController");
 router.get("/", MemberController.getAllMembers);
 router.get("/:id", MemberController.getMemberById);
 router.delete("/:id", MemberController.deleteMember);
+router.get("/specific", MemberController.getMembers);
 
 module.exports = router;

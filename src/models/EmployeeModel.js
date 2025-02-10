@@ -15,6 +15,13 @@ const Employee = {
       callback
     );
   },
+
+  getSpecificData: (callback) => {
+    db.query(
+      "SELECT idemployee, name, phoneNumber, schedule, rate FROM employee",
+      callback
+    );
+  },
 };
 
 module.exports = Employee;

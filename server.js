@@ -16,6 +16,10 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: "Internal Server Error" });
 });
 
+app.get("/", (req, res) => {
+  res.send("Welcome to the Gym App Backend!");
+});
+
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
