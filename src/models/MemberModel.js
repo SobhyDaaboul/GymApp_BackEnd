@@ -4,10 +4,6 @@ const Member = {
   // Check if email exists
   findByEmail: (email, callback) => {
     const query = "SELECT * FROM member WHERE email = ?";
-<<<<<<< HEAD
-
-=======
->>>>>>> 9792dffe3b28565559b796093f5120daa837f181
     db.query(query, [email], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);
@@ -18,10 +14,6 @@ const Member = {
   create: (memberData, callback) => {
     const query =
       "INSERT INTO member (name, phoneNumber, email, password, isLoggedIn) VALUES (?, ?, ?, ?, ?)";
-<<<<<<< HEAD
-
-=======
->>>>>>> 9792dffe3b28565559b796093f5120daa837f181
     db.query(
       query,
       [
@@ -41,10 +33,6 @@ const Member = {
   // Fetch member by ID
   findById: (id, callback) => {
     const query = "SELECT * FROM member WHERE id = ?";
-<<<<<<< HEAD
-
-=======
->>>>>>> 9792dffe3b28565559b796093f5120daa837f181
     db.query(query, [id], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);
