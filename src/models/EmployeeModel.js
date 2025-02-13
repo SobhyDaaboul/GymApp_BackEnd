@@ -16,11 +16,20 @@ const Employee = {
     );
   },
 
+  //ANDROID
   getSpecificData: (callback) => {
     db.query(
       "SELECT idemployee, name, phoneNumber, schedule, rate FROM employee",
       callback
     );
+  },
+
+  delete: (idemployee, callback) => {
+    const query = "DELETE FROM employee WHERE idemployee = ?";
+    db.query(query, [idemployee], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results);
+    });
   },
 };
 

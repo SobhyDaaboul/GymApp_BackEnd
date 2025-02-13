@@ -18,6 +18,26 @@ const ClassController = {
     });
   },
 
+  deleteClass(req, res) {
+    try {
+      const classCode = req.params.classCode; // Retrieve classCode from the URL params
+      Class.delete(classCode, (err, results) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error deleting class", error: err });
+        }
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ message: "Class not found" });
+        }
+        res.json({ message: "Class deleted successfully" });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+
   getSpecificClassData: (req, res) => {
     Class.getSpecificClassData((err, results) => {
       if (err) {

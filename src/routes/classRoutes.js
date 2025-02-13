@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.get("/", classController.getAllClasses);
 router.get("/specific", classController.getSpecificClassData);
+router.delete("/:classCode", classController.deleteClass);
 
 module.exports = router;

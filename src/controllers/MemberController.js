@@ -63,6 +63,7 @@ class MemberController {
     }
   }
 
+  //ANDROID
   static async deleteMember(req, res) {
     try {
       const memberId = req.params.id;
@@ -80,6 +81,7 @@ class MemberController {
     }
   }
 
+  //ANDROID
   static async getMembers(req, res) {
     try {
       Member.findMembers((err, results) => {

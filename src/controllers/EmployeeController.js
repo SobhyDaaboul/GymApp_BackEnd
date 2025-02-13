@@ -28,6 +28,28 @@ const EmployeeController = {
     });
   },
 
+  //ANDROID
+  deleteEmployee(req, res) {
+    try {
+      const idemployee = req.params.idemployee;
+      Employee.delete(idemployee, (err, results) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error deleting Trainer", error: err });
+        }
+        if (results.affectedRows === 0) {
+          return res.status(404).json({ message: "Trainer not found" });
+        }
+        res.json({ message: "Trainer deleted successfully" });
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  },
+
+  //ANDROID
   getSpecificData: (err, results) => {
     if (err) {
       console.error("Error fetching specific employee data:", err);
