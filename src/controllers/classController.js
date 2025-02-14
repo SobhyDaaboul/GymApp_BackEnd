@@ -1,4 +1,4 @@
-const Class = require("../models/ClassModel");
+const GymClass = require("../models/ClassModel");
 
 const ClassController = {
   createClass: (req, res) => {
