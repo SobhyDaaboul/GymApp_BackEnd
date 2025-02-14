@@ -32,7 +32,7 @@ const Member = {
 
   // Fetch member by ID
   findById: (id, callback) => {
-    const query = "SELECT * FROM member WHERE id = ?";
+    const query = "SELECT * FROM member WHERE `member-id` = ?";
     db.query(query, [id], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);
@@ -50,7 +50,7 @@ const Member = {
 
   // Delete member by ID
   delete: (id, callback) => {
-    const query = "DELETE FROM members WHERE id = ?";
+    const query = "DELETE FROM member WHERE `member-id` = ?";
     db.query(query, [id], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);
@@ -67,7 +67,7 @@ const Member = {
   },
 
   deleteById(memberId, callback) {
-    const query = "DELETE FROM member WHERE id = ?";
+    const query = "DELETE FROM member WHERE `member-id` = ?";
     db.query(query, [memberId], (err, results) => {
       if (err) {
         return callback(err, null);
@@ -77,7 +77,7 @@ const Member = {
   },
 
   updateLoginStatus(memberId, status, callback) {
-    const query = "UPDATE member SET isLoggedIn = ? WHERE member_id = ?";
+    const query = "UPDATE member SET isLoggedIn = ? WHERE `member_id` = ?";
     db.query(query, [status, memberId], (err, results) => {
       if (err) {
         return callback(err, null);
