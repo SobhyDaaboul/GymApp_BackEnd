@@ -1,4 +1,4 @@
-const GymClass = require("../models/ClassModel");
+const Class = require("../models/ClassModel");
 
 const ClassController = {
   createClass: (req, res) => {
@@ -18,6 +18,7 @@ const ClassController = {
     });
   },
 
+  //ANDROID
   deleteClass(req, res) {
     try {
       const classCode = req.params.classCode; // Retrieve classCode from the URL params
@@ -38,6 +39,7 @@ const ClassController = {
     }
   },
 
+  //ANDROID
   getSpecificClassData: (req, res) => {
     Class.getSpecificClassData((err, results) => {
       if (err) {
@@ -48,6 +50,30 @@ const ClassController = {
       }
       res.json(results);
     });
+  },
+
+  //ANDROID
+  updateClass(req, res) {
+    try {
+      const { className, type, schedule, duration, price } = req.body;
+      const classCode = req.params.classCode;
+      if (!className || !type || !schedule || !duration || !price) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      Class.updateClass(className, type, schedule, duration, price, classCode)
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Class updated successfully", result });
+        })
+        .catch((err) => {
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        });
+    } catch (err) {
+      return res.status(500).json({ message: "Server error", error: err });
+    }
   },
 };
 

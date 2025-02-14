@@ -24,11 +24,27 @@ const Employee = {
     );
   },
 
+  //ANDROID
   delete: (idemployee, callback) => {
     const query = "DELETE FROM employee WHERE idemployee = ?";
     db.query(query, [idemployee], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);
+    });
+  },
+
+  //ANDROID
+  updateEmployee(name, phoneNumber, rate, schedule, idemployee) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE employee SET name = ?, phoneNumber = ?, rate = ?, schedule = ? WHERE idemployee = ?`;
+      db.query(
+        sql,
+        [name, phoneNumber, rate, schedule, idemployee],
+        (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        }
+      );
     });
   },
 };
