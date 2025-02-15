@@ -37,6 +37,8 @@ class LoginController {
 
           // ✅ Send only the success message
           res.json({ message: "Login successful" });
+          // After successful login
+          localStorage.setItem("userEmail", email);
         });
       });
     } catch (error) {
