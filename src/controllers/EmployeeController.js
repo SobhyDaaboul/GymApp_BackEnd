@@ -59,6 +59,30 @@ const EmployeeController = {
     }
     res.json(results);
   },
+
+  //ANDROID
+  updateEmployee(req, res) {
+    try {
+      const { name, phoneNumber, rate, schedule } = req.body;
+      const idemployee = req.params.idemployee;
+      if (!name || !phoneNumber || !rate || !schedule) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      Employee.updateEmployee(name, phoneNumber, rate, schedule, idemployee)
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Employee updated successfully", result });
+        })
+        .catch((err) => {
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        });
+    } catch (err) {
+      return res.status(500).json({ message: "Server error", error: err });
+    }
+  },
 };
 
 module.exports = EmployeeController;

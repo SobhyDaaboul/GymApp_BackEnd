@@ -85,6 +85,21 @@ const Member = {
       callback(null, results);
     });
   },
+
+  //ANDROID
+  updateMember(name, email, password, phoneNumber, memberId) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE member SET name = ?, email = ?, password = ?, phoneNumber = ? WHERE \`member-id\` = ?`;
+      db.query(
+        sql,
+        [name, email, password, phoneNumber, memberId],
+        (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        }
+      );
+    });
+  },
 };
 
 module.exports = Member;

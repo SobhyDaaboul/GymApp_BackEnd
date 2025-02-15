@@ -18,6 +18,7 @@ const ClassController = {
     });
   },
 
+  //ANDROID
   deleteClass(req, res) {
     try {
       const classCode = req.params.classCode; // Retrieve classCode from the URL params
@@ -38,6 +39,7 @@ const ClassController = {
     }
   },
 
+  //ANDROID
   getSpecificClassData: (req, res) => {
     Class.getSpecificClassData((err, results) => {
       if (err) {
@@ -50,47 +52,28 @@ const ClassController = {
     });
   },
 
-  getMemberId: (req, res) => {
-    // You can retrieve member info based on session, token, or any other method
-    const memberId = req.user.id; // Assuming you have a way to identify logged-in member
-
-    if (!memberId) {
-      return res.status(404).json({ message: "Member not found" });
+  //ANDROID
+  updateClass(req, res) {
+    try {
+      const { className, type, schedule, duration, price } = req.body;
+      const classCode = req.params.classCode;
+      if (!className || !type || !schedule || !duration || !price) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      Class.updateClass(className, type, schedule, duration, price, classCode)
+        .then((result) => {
+          return res
+            .status(200)
+            .json({ message: "Class updated successfully", result });
+        })
+        .catch((err) => {
+          return res
+            .status(500)
+            .json({ message: "Database error", error: err });
+        });
+    } catch (err) {
+      return res.status(500).json({ message: "Server error", error: err });
     }
-
-    res.json({ memberId });
-  },
-
-  getClassCode: (req, res) => {
-    const classTitle = req.params.classTitle;
-
-    classModel.getClassCodeByTitle(classTitle, (err, classCode) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: "Error fetching class code", error: err });
-      }
-      if (!classCode) {
-        return res.status(404).json({ message: "Class not found" });
-      }
-      res.json({ classCode: classCode });
-    });
-  },
-
-  // Controller to save booking information
-  saveBooking: (req, res) => {
-    const { memberId, classCode, selectedDay } = req.body;
-
-    classModel.saveBooking(memberId, classCode, selectedDay, (err, result) => {
-      if (err) {
-        return res
-          .status(500)
-          .json({ message: "Error saving booking", error: err });
-      }
-      res
-        .status(200)
-        .json({ message: "Booking successfully saved", result: result });
-    });
   },
 };
 

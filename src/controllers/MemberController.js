@@ -103,6 +103,29 @@ class MemberController {
       res.status(500).json({ message: "Server error" });
     }
   }
+
+  //ANDROID
+  static async updateMember(req, res) {
+    try {
+      const { name, email, password, phoneNumber } = req.body;
+      const memberId = req.params.id; // Get memberId from URL
+      if (!name || !email || !password || !phoneNumber) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+      const result = await Member.updateMember(
+        name,
+        email,
+        password,
+        phoneNumber,
+        memberId
+      );
+      return res
+        .status(200)
+        .json({ message: "Member updated successfully", result });
+    } catch (err) {
+      return res.status(500).json({ message: "Database error", error: err });
+    }
+  }
 }
 
 module.exports = MemberController;

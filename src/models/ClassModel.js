@@ -59,6 +59,21 @@ const GymClass = {
       callback
     );
   },
+
+  //ANDROID
+  updateClass(name, type, schedule, duration, price, classCode) {
+    return new Promise((resolve, reject) => {
+      const sql = `UPDATE class SET className = ?, type = ?, schedule = ?, duration = ?, price = ? WHERE classCode = ?`;
+      db.query(
+        sql,
+        [name, type, schedule, duration, price, classCode],
+        (err, result) => {
+          if (err) reject(err);
+          else resolve(result);
+        }
+      );
+    });
+  },
 };
 
 module.exports = GymClass;
