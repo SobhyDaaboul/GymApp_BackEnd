@@ -49,6 +49,49 @@ const ClassController = {
       res.json(results);
     });
   },
+
+  getMemberId: (req, res) => {
+    // You can retrieve member info based on session, token, or any other method
+    const memberId = req.user.id; // Assuming you have a way to identify logged-in member
+
+    if (!memberId) {
+      return res.status(404).json({ message: "Member not found" });
+    }
+
+    res.json({ memberId });
+  },
+
+  getClassCode: (req, res) => {
+    const classTitle = req.params.classTitle;
+
+    classModel.getClassCodeByTitle(classTitle, (err, classCode) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error fetching class code", error: err });
+      }
+      if (!classCode) {
+        return res.status(404).json({ message: "Class not found" });
+      }
+      res.json({ classCode: classCode });
+    });
+  },
+
+  // Controller to save booking information
+  saveBooking: (req, res) => {
+    const { memberId, classCode, selectedDay } = req.body;
+
+    classModel.saveBooking(memberId, classCode, selectedDay, (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error saving booking", error: err });
+      }
+      res
+        .status(200)
+        .json({ message: "Booking successfully saved", result: result });
+    });
+  },
 };
 
 module.exports = ClassController;
