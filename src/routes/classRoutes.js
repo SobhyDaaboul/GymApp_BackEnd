@@ -7,7 +7,4 @@ router.get("/specific", classController.getSpecificClassData);
 router.delete("/:classCode", classController.deleteClass);
 router.put("/update/:classCode", classController.updateClass);
 
-router.get("/get-class-code/:className", classController.getClassCode);
-router.post("/save-booking", classController.saveBooking);
-
 module.exports = router;

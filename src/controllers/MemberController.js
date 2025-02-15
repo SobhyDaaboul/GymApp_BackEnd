@@ -40,29 +40,6 @@ class MemberController {
     }
   }
 
-  static async getMemberByEmail(req, res) {
-    try {
-      const email = req.params.email;
-      Member.findByEmail(email, (err, results) => {
-        if (err) {
-          return res
-            .status(500)
-            .json({ message: "Error fetching member", error: err });
-        }
-        if (results.length === 0) {
-          return res.status(404).json({ message: "Member not found" });
-        }
-        res.json({
-          message: "Member retrieved successfully",
-          data: results[0],
-        });
-      });
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Server error" });
-    }
-  }
-
   //ANDROID
   static async deleteMember(req, res) {
     try {

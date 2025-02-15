@@ -30,18 +30,6 @@ const GymClass = {
       }
     });
   },
-  // Function to insert booking details into member_gymclass table
-  saveBooking: (memberId, classCode, callback) => {
-    const query =
-      "INSERT INTO member_gymclass (member_id, classCode) VALUES (?, ?, ?)";
-    db.query(query, [memberId, classCode], (err, results) => {
-      if (err) {
-        callback(err, null);
-      } else {
-        callback(null, results);
-      }
-    });
-  },
 
   // ANDROID
   delete: (classCode, callback) => {
