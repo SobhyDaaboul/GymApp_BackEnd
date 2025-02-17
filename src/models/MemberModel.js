@@ -1,16 +1,7 @@
 const db = require("../config/db");
 
 const Member = {
-  // Check if email exists
-  findByEmail: (email, callback) => {
-    const query = "SELECT * FROM member WHERE email = ?";
-    db.query(query, [email], (err, results) => {
-      if (err) return callback(err, null);
-      callback(null, results);
-    });
-  },
-
-  // Create new member
+  // Create new member for signup
   create: (memberData, callback) => {
     const query =
       "INSERT INTO member (name, phoneNumber, email, password, isLoggedIn) VALUES (?, ?, ?, ?, ?)";
@@ -30,7 +21,16 @@ const Member = {
     );
   },
 
-  // Fetch member by ID
+  // Check if email exists for signup and login
+  findByEmail: (email, callback) => {
+    const query = "SELECT * FROM member WHERE email = ?";
+    db.query(query, [email], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results);
+    });
+  },
+
+  // get member by ID
   findById: (id, callback) => {
     const query = "SELECT * FROM member WHERE `member-id` = ?";
     db.query(query, [id], (err, results) => {
@@ -39,7 +39,7 @@ const Member = {
     });
   },
 
-  // Fetch all members
+  // get all members
   findAll: (callback) => {
     const query = "SELECT * FROM member";
     db.query(query, (err, results) => {
@@ -47,35 +47,7 @@ const Member = {
       callback(null, results);
     });
   },
-
-  // Delete member by ID
-  delete: (id, callback) => {
-    const query = "DELETE FROM member WHERE `member-id` = ?";
-    db.query(query, [id], (err, results) => {
-      if (err) return callback(err, null);
-      callback(null, results);
-    });
-  },
-
-  findMembers: (callback) => {
-    const query =
-      "SELECT member-id, name, email, password, phoneNumber FROM member";
-    db.query(query, (err, results) => {
-      if (err) return callback(err, null);
-      callback(null, results);
-    });
-  },
-
-  deleteById(memberId, callback) {
-    const query = "DELETE FROM member WHERE `member-id` = ?";
-    db.query(query, [memberId], (err, results) => {
-      if (err) {
-        return callback(err, null);
-      }
-      callback(null, results);
-    });
-  },
-
+  //for login
   updateLoginStatus(memberId, status, callback) {
     const query = "UPDATE member SET isLoggedIn = ? WHERE `member_id` = ?";
     db.query(query, [status, memberId], (err, results) => {
@@ -98,6 +70,23 @@ const Member = {
           else resolve(result);
         }
       );
+    });
+  },
+  // Delete member by ID android
+  delete: (id, callback) => {
+    const query = "DELETE FROM member WHERE `member-id` = ?";
+    db.query(query, [id], (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results);
+    });
+  },
+  //android
+  findMembers: (callback) => {
+    const query =
+      "SELECT member-id, name, email, password, phoneNumber FROM member";
+    db.query(query, (err, results) => {
+      if (err) return callback(err, null);
+      callback(null, results);
     });
   },
 };

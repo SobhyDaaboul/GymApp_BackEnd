@@ -5,14 +5,12 @@ class LoginController {
     try {
       const { email, password } = req.body;
 
-      // Input validation
       if (!email || !password) {
         return res
           .status(400)
           .json({ message: "Email and password are required" });
       }
 
-      // Check if the email exists
       Member.findByEmail(email, (err, results) => {
         if (err) {
           return res.status(500).json({ message: "Server error", error: err });
@@ -29,21 +27,17 @@ class LoginController {
         }
 
         // Update login status
-        Member.updateLoginStatus(
-          member.member_id,
-          1,
-          (updateErr, updateResults) => {
-            if (updateErr) {
-              return res.status(500).json({
-                message: "Error updating login status",
-                error: updateErr,
-              });
-            }
-
-            // Login successful
-            res.json({ message: "Login successful", memberId: member.id });
+        Member.updateLoginStatus(member.member_id, 1, (updateErr) => {
+          if (updateErr) {
+            return res.status(500).json({
+              message: "Error updating login status",
+              error: updateErr,
+            });
           }
-        );
+
+          // ✅ Send only the success message
+          res.json({ message: "Login successful" });
+        });
       });
     } catch (error) {
       console.error(error);

@@ -17,6 +17,7 @@ const ClassController = {
       res.json(results);
     });
   },
+  //assdd
 
   //ANDRO
   deleteClass(req, res) {
