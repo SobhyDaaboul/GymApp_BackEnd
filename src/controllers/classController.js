@@ -1,29 +1,35 @@
-const Class = require("../models/ClassModel");
+const ClassModel = require("../models/ClassModel");
 
 const ClassController = {
-  createClass: (req, res) => {
-    const classData = req.body;
-    Class.create(classData, (err, result) => {
-      if (err) return res.status(500).json(err);
-      res
-        .status(201)
-        .json({ message: "Class created successfully", id: result.insertId });
-    });
+  getClassCode: (req, res) => {
+    const { class_name } = req.params;
+    ClassModel.getClassCodeByName(class_name)
+      .then((class_code) => {
+        if (!class_code) {
+          return res.status(404).json({ error: "Class not found" });
+        }
+        res.json({ class_code });
+      })
+      .catch((err) => {
+        console.error("Error fetching class code:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      });
   },
 
   getAllClasses: (req, res) => {
-    Class.getAll((err, results) => {
-      if (err) return res.status(500).json(err);
+    ClassModel.getAll((err, results) => {
+      if (err) {
+        console.error("Database error:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
       res.json(results);
     });
   },
-  //assdd
-
-  //ANDROID
+  // ANDROID: Delete class
   deleteClass(req, res) {
     try {
       const classCode = req.params.classCode; // Retrieve classCode from the URL params
-      Class.delete(classCode, (err, results) => {
+      ClassModel.delete(classCode, (err, results) => {
         if (err) {
           return res
             .status(500)
@@ -40,9 +46,9 @@ const ClassController = {
     }
   },
 
-  //ANDROID
-  getSpecificClassData: (req, res) => {
-    Class.getSpecificClassData((err, results) => {
+  // ANDROID: Get specific class data
+  getSpecificClassData(req, res) {
+    ClassModel.getSpecificClassData((err, results) => {
       if (err) {
         console.error("Error fetching specific class data:", err);
         return res
@@ -53,7 +59,7 @@ const ClassController = {
     });
   },
 
-  //ANDROID
+  // ANDROID: Update class
   updateClass(req, res) {
     try {
       const { className, type, schedule, duration, price } = req.body;
@@ -61,7 +67,14 @@ const ClassController = {
       if (!className || !type || !schedule || !duration || !price) {
         return res.status(400).json({ message: "All fields are required" });
       }
-      Class.updateClass(className, type, schedule, duration, price, classCode)
+      ClassModel.updateClass(
+        className,
+        type,
+        schedule,
+        duration,
+        price,
+        classCode
+      )
         .then((result) => {
           return res
             .status(200)

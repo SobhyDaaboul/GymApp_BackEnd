@@ -1,19 +1,20 @@
 const db = require("../config/db");
 
 const MemberGymClass = {
-  create: (memberGymClass, callback) => {
-    const sql = `
-      INSERT INTO member_gymclass (member_id, class_code, selectedDay) 
-      VALUES (?, ?, ?)`;
-    db.query(
-      sql,
-      [
-        memberGymClass.member - id,
-        memberGymClass.class_code,
-        memberGymClass.selectedDay,
-      ],
-      callback
-    );
+  // Function to add a member to a gym class
+  addMemberToGymClass: (member_id, classCode, callback) => {
+    const query = `
+      INSERT INTO member_gymclass (member_id, class_code)
+      VALUES (?, ?)`;
+
+    db.query(query, [member_id, classCode], (err, result) => {
+      if (err) {
+        console.error("Error adding member to class:", err);
+        return callback(err, null); // Pass error to callback
+      }
+      console.log("Booking successful: ", result);
+      callback(null, result); // Pass result to callback
+    });
   },
 
   delete: (member_id, callback) => {

@@ -1,30 +1,31 @@
-const MemberGymClass = require("../models/Member_gymclassModel");
-const isLoggedIn = require("../controllers/isLoggedIn");
+// controllers/memberGymClassController.js
+
+const MemberGymClassModel = require("../models/Member_gymclassModel");
 
 const MemberGymClassController = {
-  createMemberGymClass: (req, res) => {
-    // Check if the user is logged in
-    if (!req.user || !req.user.isLoggedIn) {
-      return res.status(401).json({ message: "Please log in first" });
+  // Function to book class
+  bookClass: (req, res) => {
+    const { memberId, classCode } = req.body;
+
+    if (!memberId || !classCode) {
+      return res
+        .status(400)
+        .json({ error: "Member ID and Class Code are required" });
     }
 
-    MemberGymClass.create(req.body, (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.status(201).json(results);
-    });
-  },
-
-  deleteMemberGymClass: (req, res) => {
-    // Check if the user is logged in
-    if (!req.user || !req.user.isLoggedIn) {
-      return res.status(401).json({ message: "Please log in first" });
-    }
-
-    const member_id = req.params.member_id;
-    MemberGymClass.delete(member_id, (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.status(204).send();
-    });
+    // Call the model function to add the member to the gym class
+    MemberGymClassModel.addMemberToGymClass(
+      memberId,
+      classCode,
+      (err, result) => {
+        if (err) {
+          console.error("Error booking class:", err);
+          return res.status(500).json({ error: "Internal server error" });
+        }
+        // Send success response
+        res.status(200).json({ message: "Class successfully booked", result });
+      }
+    );
   },
 };
 
