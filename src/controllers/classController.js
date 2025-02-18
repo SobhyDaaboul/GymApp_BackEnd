@@ -25,7 +25,8 @@ const ClassController = {
       res.json(results);
     });
   },
-  // ANDROID: Delete class
+
+  //ANDRO
   deleteClass(req, res) {
     try {
       const classCode = req.params.classCode; // Retrieve classCode from the URL params
@@ -89,6 +90,8 @@ const ClassController = {
       return res.status(500).json({ message: "Server error", error: err });
     }
   },
+
+  //COMMENT
 };
 
 module.exports = ClassController;
