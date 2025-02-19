@@ -1,32 +1,41 @@
-// controllers/memberGymClassController.js
+const Member = require("../models/MemberModel");
+const MemberGymClass = require("../models/Member_gymclassModel"); // Ensure you import this model
 
-const MemberGymClassModel = require("../models/Member_gymclassModel");
+class MemberGymClassController {
+  async bookClass(req, res) {
+    const { member_id } = req.params; // Get from URL
+    const { classCode } = req.body;
 
-const MemberGymClassController = {
-  // Function to book class
-  bookClass: (req, res) => {
-    const { memberId, classCode } = req.body;
-
-    if (!memberId || !classCode) {
-      return res
-        .status(400)
-        .json({ error: "Member ID and Class Code are required" });
-    }
-
-    // Call the model function to add the member to the gym class
-    MemberGymClassModel.addMemberToGymClass(
-      memberId,
-      classCode,
-      (err, result) => {
-        if (err) {
-          console.error("Error booking class:", err);
-          return res.status(500).json({ error: "Internal server error" });
-        }
-        // Send success response
-        res.status(200).json({ message: "Class successfully booked", result });
+    try {
+      // 1. Verify member exists and is logged in
+      const member = await Member.findById(member_id);
+      if (!member) {
+        return res.status(404).json({ error: "Member not found" });
       }
-    );
-  },
-};
+      if (member.isLoggedIn !== 1) {
+        return res.status(403).json({ error: "Member not logged in" });
+      }
 
-module.exports = MemberGymClassController;
+      // 2. Check if class is already booked
+      const existing = await MemberGymClass.findOne({
+        where: { memberId: member_id, classCode },
+      });
+      if (existing) {
+        return res.status(409).json({ error: "Already booked" });
+      }
+
+      // 3. Proceed with booking
+      const newBooking = await MemberGymClass.create({
+        memberId: member_id,
+        classCode: classCode,
+      });
+
+      return res.json({ message: "Booking successful", result: newBooking });
+    } catch (err) {
+      console.error("Booking error:", err);
+      return res.status(500).json({ error: "Class booking failed" });
+    }
+  }
+}
+
+module.exports = new MemberGymClassController();

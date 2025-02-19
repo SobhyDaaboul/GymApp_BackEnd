@@ -2,18 +2,11 @@ const ClassModel = require("../models/ClassModel");
 
 const ClassController = {
   getClassCode: (req, res) => {
-    const { class_name } = req.params;
-    ClassModel.getClassCodeByName(class_name)
-      .then((class_code) => {
-        if (!class_code) {
-          return res.status(404).json({ error: "Class not found" });
-        }
-        res.json({ class_code });
-      })
-      .catch((err) => {
-        console.error("Error fetching class code:", err);
-        return res.status(500).json({ error: "Internal server error" });
-      });
+    const className = req.params.className;
+
+    ClassModel.getClassCodeByName(className)
+      .then((classCode) => res.json({ classCode }))
+      .catch((err) => res.status(500).json({ error: "Class not found" }));
   },
 
   getAllClasses: (req, res) => {

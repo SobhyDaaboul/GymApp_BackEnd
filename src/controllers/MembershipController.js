@@ -1,5 +1,4 @@
 const Membership = require("../models/MembershipModel");
-const isLoggedIn = require("../controllers/isLoggedIn");
 
 const MembershipController = {
   createMembership: (req, res) => {
