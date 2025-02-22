@@ -32,7 +32,7 @@ const Member = {
 
   // get member by ID
   findById: (id, callback) => {
-    const query = "SELECT * FROM member WHERE `member-id` = ?";
+    const query = "SELECT * FROM member WHERE `member_id` = ?";
     db.query(query, [id], (err, results) => {
       if (err) return callback(err, null);
       callback(null, results);

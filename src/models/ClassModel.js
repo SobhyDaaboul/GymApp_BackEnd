@@ -8,32 +8,22 @@ const GymClass = {
     );
   },
 
-  getByCode: (Code, callback) => {
-    db.query("SELECT * FROM class WHERE classCode = ?", [Code], callback);
+  getByName: (className, callback) => {
+    db.query(
+      "SELECT classCode FROM class WHERE name = ?",
+      [className],
+      (err, results) => {
+        if (err) {
+          callback(err, null);
+        } else {
+          callback(null, results.length > 0 ? results[0].classCode : null);
+        }
+      }
+    );
   },
 
   create: (classData, callback) => {
     db.query("INSERT INTO class SET ?", classData, callback);
-  },
-
-  getClassCodeByName: (className) => {
-    return new Promise((resolve, reject) => {
-      const query =
-        "SELECT classCode FROM class WHERE LOWER(className) = LOWER(?)";
-      db.query(query, [className], (err, results) => {
-        if (err) {
-          console.error("Database error:", err);
-          return reject(err);
-        }
-
-        if (results.length > 0) {
-          resolve(results[0].classCode);
-        } else {
-          console.log(`Class not found: ${className}`);
-          reject(new Error("Class not found")); // Better error handling
-        }
-      });
-    });
   },
 
   // ANDROID

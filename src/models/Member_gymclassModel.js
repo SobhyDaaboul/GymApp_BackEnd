@@ -1,29 +1,21 @@
 const db = require("../config/db");
 
-const MemberGymClass = {
-  // Function to add a member to a gym class
-  addMemberToGymClass: (member_id, classCode, callback) => {
-    const query = `
-      INSERT INTO member_gymclass (member_id, class_code)
-      VALUES (?, ?)`;
-
-    db.query(query, [member_id, classCode], (err, result) => {
-      if (err) {
-        console.error("Error adding member to class:", err);
-        return callback(err, null); // Pass error to callback
-      }
-      console.log("Booking successful: ", result);
-      callback(null, result); // Pass result to callback
-    });
-  },
-
-  delete: (member_id, callback) => {
-    db.query(
-      "DELETE FROM member_gymclass WHERE member_id = ?",
-      [member_id],
-      callback
+class MemberGymClass {
+  static async createBooking(memberId, class_code) {
+    const [result] = await db.query(
+      "INSERT INTO member_gymclass (member_id, class_code) VALUES (?, ?)",
+      [memberId, class_code]
     );
-  },
-};
+    return result;
+  }
+
+  static async findExistingBooking(member_id, class_code) {
+    const [rows] = await db.query(
+      "SELECT * FROM member_gymclass WHERE member_id = ? AND class_code = ?",
+      [member_id, class_code]
+    );
+    return rows[0];
+  }
+}
 
 module.exports = MemberGymClass;

@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 
 // Load environment variables
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 
 // Middleware
 app.use(cors());
@@ -27,11 +27,13 @@ app.get("/", (req, res) => {
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
+  console.log("Received request:", req.method, req.url);
   console.error("❌ Server Error:", err.stack);
   res.status(500).json({ message: "Internal Server Error" });
+  next();
 });
 
 // Start the Server
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });

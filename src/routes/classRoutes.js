@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const classController = require("../controllers/classController");
 
-router.get("/get-class-code/:class_name", classController.getClassCode);
+//React
+router.get("/classcode/:className", classController.getClassCodeByName);
+router.get("/getclasses", classController.getAllClasses);
 
-router.get("/", classController.getAllClasses);
+//Android
 router.get("/specific", classController.getSpecificClassData);
 router.delete("/:classCode", classController.deleteClass);
 router.put("/update/:classCode", classController.updateClass);
