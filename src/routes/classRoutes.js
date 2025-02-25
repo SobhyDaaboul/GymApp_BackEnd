@@ -3,7 +3,6 @@ const router = express.Router();
 const classController = require("../controllers/classController");
 
 //React
-router.get("/classcode/:className", classController.getClassCodeByName);
 router.get("/getclasses", classController.getAllClasses);
 
 //Android

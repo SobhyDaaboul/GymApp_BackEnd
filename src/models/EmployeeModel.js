@@ -3,7 +3,7 @@ const db = require("../config/db");
 const Employee = {
   getAll: (callback) => {
     db.query(
-      "SELECT idemployee, name, phoneNumber, schedule, rate, description, image FROM employee",
+      "SELECT idemployee,sessionCode,name, phoneNumber, schedule, rate, description, image FROM employee",
       callback
     );
   },

@@ -1,29 +1,9 @@
 const GymClass = require("../models/ClassModel");
 
 const ClassController = {
-  // Get class code by name
-  getClassCodeByName: (req, res) => {
-    const { className } = req.params;
-
-    GymClass.getByName(className, (err, classCode) => {
-      if (err) {
-        console.error("Error fetching class code:", err);
-        return res
-          .status(500)
-          .json({ message: "Error fetching class code", error: err });
-      }
-
-      if (!classCode) {
-        return res.status(404).json({ message: "Class not found" });
-      }
-      res.json({ classCode });
-    });
-  },
-
   // Get all classes
   getAllClasses: (req, res) => {
     GymClass.getAll((err, results) => {
-      console.log(results);
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ error: "Internal server error" });

@@ -3,7 +3,7 @@ const db = require("../config/db");
 const GymClass = {
   getAll: (callback) => {
     db.query(
-      "SELECT classCode,className, schedule, duration, price, image FROM class",
+      "SELECT classID,classCode,className, schedule, duration, price, image FROM class",
       callback
     );
   },

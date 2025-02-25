@@ -37,7 +37,7 @@ class LoginController {
         const token = jwt.sign(
           { id: member.member_id, email: member.email },
           SECRET_KEY,
-          { expiresIn: "1d" } // Token expires in 1 day
+          { expiresIn: "1h" } // Token expires in 1 hour
         );
 
         // ✅ Update login status
