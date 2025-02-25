@@ -84,6 +84,30 @@ const MembershipController = {
     });
   },
 
+  getMembershipDetails: (req, res) => {
+    const { userId } = req.body; // Get `userId` from request body
+
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    const query = "SELECT * FROM membership WHERE member_id = ?";
+
+    db.query(query, [userId], (err, results) => {
+      if (err) {
+        console.error("Error fetching membership data:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      }
+
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Membership not found" });
+      }
+
+      const membershipDetails = results[0]; // Assuming there's only one result
+      res.json(membershipDetails); // Send membership data back to frontend
+    });
+  },
+
   // Delete a membership by ID
   deleteMembership: (req, res) => {
     const { id } = req.params;
