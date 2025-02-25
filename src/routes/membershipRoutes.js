@@ -1,10 +1,8 @@
 const router = require("express").Router();
+const verifyToken = require("../middleware/Auth");
 
 const MembershipController = require("../controllers/membershipController");
 
-router.post("/membership", MembershipController.createMembership);
-router.get("/membership", MembershipController.getAllMemberships);
-router.get("/membership/:id", MembershipController.getMembershipById);
-router.delete("/membership/:id", MembershipController.deleteMembership);
+router.post("/create", verifyToken, MembershipController.createMembership);
 
 module.exports = router;

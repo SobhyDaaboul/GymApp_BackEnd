@@ -35,7 +35,7 @@ class LoginController {
 
         // ✅ Generate JWT token
         const token = jwt.sign(
-          { id: member.member_id, email: member.email },
+          { id: member.member_id, email: member.email, name: member.name },
           SECRET_KEY,
           { expiresIn: "1h" } // Token expires in 1 hour
         );

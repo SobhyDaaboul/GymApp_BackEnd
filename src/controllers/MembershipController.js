@@ -1,45 +1,113 @@
-const Membership = require("../models/MembershipModel");
+const Membership = require("../models/MembershipModel"); // Import the Membership model
 
 const MembershipController = {
+  // Create a new membership
   createMembership: (req, res) => {
-    // Check if the user is logged in
-    if (!req.user || !req.user.isLoggedIn) {
-      return res.status(401).json({ message: "Please log in first" });
+    const { startDate, endDate, membershipType, cost, status, memberId } =
+      req.body;
+
+    // Validate required fields
+    if (
+      !startDate ||
+      !endDate ||
+      !membershipType ||
+      !cost ||
+      !status ||
+      !memberId
+    ) {
+      return res.status(400).json({ message: "All fields are required." });
     }
 
-    Membership.create(req.body, (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.status(201).json(results);
+    // First, check if the member already has an active membership
+    Membership.checkMembership(memberId, (err, existingMembership) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error checking membership.", error: err });
+      }
+
+      if (existingMembership) {
+        // If the member already has an active membership, return an error
+        return res
+          .status(400)
+          .json({ message: "This member already has an active membership." });
+      }
+
+      // Prepare membership data if no existing active membership
+      const membershipData = {
+        startDate,
+        endDate,
+        membershipType,
+        cost,
+        status,
+        membershipId: memberId, // Assuming memberId is passed from the request body
+      };
+
+      // Call the model method to create the new membership
+      Membership.create(membershipData, (err, result) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ message: "Error creating membership.", error: err });
+        }
+        res
+          .status(201)
+          .json({ message: "Membership created successfully.", result });
+      });
     });
   },
 
-  getAllMemberships: (req, res) => {
-    Membership.getAll((err, results) => {
-      if (err) return res.status(500).json(err);
-      res.json(results);
+  // Check if a member has an active membership
+  checkMembership: (req, res) => {
+    const { memberId } = req.params;
+
+    // Validate memberId
+    if (!memberId) {
+      return res.status(400).json({ message: "Member ID is required." });
+    }
+
+    // Call the model method to check if membership exists
+    Membership.checkMembership(memberId, (err, membership) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error checking membership.", error: err });
+      }
+
+      if (!membership) {
+        return res
+          .status(404)
+          .json({ message: "No membership found for this member." });
+      }
+
+      res.status(200).json({ message: "Membership found.", membership });
     });
   },
 
-  getMembershipById: (req, res) => {
-    const id = req.params.id;
-    Membership.getById(id, (err, results) => {
-      if (err) return res.status(500).json(err);
-      if (results.length === 0)
-        return res.status(404).json({ message: "Membership not found" });
-      res.json(results[0]);
-    });
-  },
-
+  // Delete a membership by ID
   deleteMembership: (req, res) => {
-    // Check if the user is logged in
-    if (!req.user || !req.user.isLoggedIn) {
-      return res.status(401).json({ message: "Please log in first" });
+    const { id } = req.params;
+
+    // Validate membership ID
+    if (!id) {
+      return res.status(400).json({ message: "Membership ID is required." });
     }
 
-    const id = req.params.id;
-    Membership.delete(id, (err, results) => {
-      if (err) return res.status(500).json(err);
-      res.status(204).send();
+    // Call the model method to delete the membership
+    Membership.delete(id, (err, result) => {
+      if (err) {
+        return res
+          .status(500)
+          .json({ message: "Error deleting membership.", error: err });
+      }
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({ message: "Membership not found." });
+      }
+
+      res
+        .status(200)
+        .json({ message: "Membership deleted successfully.", result });
     });
   },
 };

@@ -1,34 +1,39 @@
 const db = require("../config/db");
 
 const Membership = {
-  create: (membership, callback) => {
-    const sql = `
-      INSERT INTO membership (membershipType, startDate, endDate) 
-      VALUES (?, NOW(),
-        CASE 
-          WHEN ? = 'Monthly' THEN DATE_ADD(NOW(), INTERVAL 1 MONTH) 
-          WHEN ? = 'Yearly' THEN DATE_ADD(NOW(), INTERVAL 1 YEAR) 
-          ELSE NULL 
-        END)`;
-
+  create: (membershipData, callback) => {
+    const sql =
+      "INSERT INTO membership (startDate,endDate,membershipType,cost,status,member_id)VALUES(?,?,?,?,?,?)";
     db.query(
       sql,
       [
-        membership.membershipType,
-        membership.membershipType,
-        membership.membershipType,
+        membershipData.startDate,
+        membershipData.endDate,
+        membershipData.membershipType,
+        membershipData.cost,
+        membershipData.status,
+        membershipData.membershipId,
       ],
-      callback
+      (err, result) => {
+        if (err) {
+          console.error("Error inserting booking:", err);
+          return callback(err, null);
+        }
+        callback(null, result); //new commit added
+      }
     );
   },
 
-  getAll: (callback) => {
-    db.query("SELECT * FROM membership", callback);
-  },
-
-  getById: (id, callback) => {
-    db.query("SELECT * FROM membership WHERE idmembership = ?", [id], callback);
-  },
+  checkMembership: (memberId, callback) => {
+    const sql = "SELECT member_id FROM membership WHERE member_id = ? ";
+    db.query(sql, [memberId], (err, rows) => {
+      if (err) {
+        console.error("Error finding your Membership:", err);
+        return callback(err, null);
+      }
+      callback(null, rows[0]); // Return the first record (if exists)
+    });
+  }, //new
 
   delete: (id, callback) => {
     db.query("DELETE FROM membership WHERE idmembership = ?", [id], callback);
