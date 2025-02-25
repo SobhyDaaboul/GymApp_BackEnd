@@ -23,6 +23,7 @@ const ClassController = {
   // Get all classes
   getAllClasses: (req, res) => {
     GymClass.getAll((err, results) => {
+      console.log(results);
       if (err) {
         console.error("Database error:", err);
         return res.status(500).json({ error: "Internal server error" });
@@ -56,7 +57,6 @@ const ClassController = {
   getSpecificClassData(req, res) {
     ClassModel.getSpecificClassData((err, results) => {
       if (err) {
-        console.error("Error fetching specific class data:", err);
         return res
           .status(500)
           .json({ error: "Failed to fetch specific class data" });

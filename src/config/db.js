@@ -16,14 +16,16 @@ const db = mysql.createConnection({
   user: DB_USER,
   password: DB_PASSWORD,
   database: DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 // Connect to the database
 db.connect((err) => {
-  if (err) {
-    console.error("❌ Error connecting to the database:", err.message);
-    return;
-  }
+  if (err)
+    return console.error("❌ Error connecting to the database:", err.message);
+
   console.log("✅ Connected to the MySQL database.");
 });
 

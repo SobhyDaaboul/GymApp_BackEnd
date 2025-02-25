@@ -3,22 +3,8 @@ const db = require("../config/db");
 const GymClass = {
   getAll: (callback) => {
     db.query(
-      "SELECT className, schedule, duration, price, image FROM class",
+      "SELECT classCode,className, schedule, duration, price, image FROM class",
       callback
-    );
-  },
-
-  getByName: (className, callback) => {
-    db.query(
-      "SELECT classCode FROM class WHERE name = ?",
-      [className],
-      (err, results) => {
-        if (err) {
-          callback(err, null);
-        } else {
-          callback(null, results.length > 0 ? results[0].classCode : null);
-        }
-      }
     );
   },
 

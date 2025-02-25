@@ -35,9 +35,9 @@ class LoginController {
 
         // ✅ Generate JWT token
         const token = jwt.sign(
-          { member_id: member.member_id, email: member.email },
+          { id: member.member_id, email: member.email },
           SECRET_KEY,
-          { expiresIn: "1h" } // Token expires in 1 hour
+          { expiresIn: "1d" } // Token expires in 1 day
         );
 
         // ✅ Update login status
@@ -54,7 +54,6 @@ class LoginController {
         });
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   }

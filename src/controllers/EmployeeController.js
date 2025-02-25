@@ -3,13 +3,12 @@ const Employee = require("../models/EmployeeModel");
 const EmployeeController = {
   getAllEmployees: (req, res) => {
     Employee.getAll((err, results) => {
-      if (err) {
-        console.error("Error in getAllEmployees:", err);
+      if (err)
         return res.status(500).json({
           message: "Internal server error",
           error: err.message,
         });
-      }
+
       res.json(results);
     });
   },
@@ -17,10 +16,9 @@ const EmployeeController = {
   getEmployeeById: (req, res) => {
     const id = req.params.id;
     Employee.getById(id, (err, results) => {
-      if (err) {
-        console.error("Error fetching employee:", err);
+      if (err)
         return res.status(500).json({ message: "Internal server error" });
-      }
+
       if (!results || results.length === 0) {
         return res.status(404).json({ message: "Employee not found" });
       }
@@ -44,7 +42,6 @@ const EmployeeController = {
         res.json({ message: "Trainer deleted successfully" });
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   },

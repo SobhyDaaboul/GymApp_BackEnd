@@ -1,13 +1,7 @@
 const router = require("express").Router();
-const authenticateUser = require("../middleware/Auth");
-const memberGymClassController = require("../controllers/MemberGymClassController"); // ✅ Import the instance
+const verifyToken = require("../middleware/Auth");
+const MemberGymClassController = require("../controllers/MemberGymClassController");
 
-console.log(authenticateUser);
-
-router.post(
-  "/bookclass",
-  authenticateUser,
-  memberGymClassController.bookClass // ✅ Ensure it's a function
-);
+router.post("/bookclass", verifyToken, MemberGymClassController.createBooking);
 
 module.exports = router;

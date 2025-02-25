@@ -12,7 +12,6 @@ class MemberController {
         res.json({ message: "Members retrieved successfully", data: results });
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   }
@@ -53,7 +52,6 @@ class MemberController {
         res.json({ message: "Member deleted successfully" });
       });
     } catch (error) {
-      console.error(error);
       res.status(500).json({ message: "Server error" });
     }
   }

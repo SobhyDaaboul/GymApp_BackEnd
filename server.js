@@ -27,8 +27,6 @@ app.get("/", (req, res) => {
 
 // Global Error Handling Middleware
 app.use((err, req, res, next) => {
-  console.log("Received request:", req.method, req.url);
-  console.error("❌ Server Error:", err.stack);
   res.status(500).json({ message: "Internal Server Error" });
   next();
 });
