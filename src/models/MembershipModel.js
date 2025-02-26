@@ -35,6 +35,18 @@ const Membership = {
     });
   }, //new
 
+  getMembershipInfo: (id, callback) => {
+    const query = "SELECT * FROM membership WHERE member_id = ?";
+
+    db.query(query, [id], (err, result) => {
+      if (err) {
+        console.error("Error inserting booking:", err);
+        return callback(err, null);
+      }
+      callback(null, result); //new commit added
+    });
+  },
+
   delete: (id, callback) => {
     db.query("DELETE FROM membership WHERE idmembership = ?", [id], callback);
   },

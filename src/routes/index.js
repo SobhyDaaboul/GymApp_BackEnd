@@ -14,7 +14,7 @@ router.use("/employee", employeeRoutes); // Employee routes
 router.use("/membership", membershipRoutes); // Membership routes
 router.use("/member", memberRoutes); // Member routes
 router.use("/membergymclass", memberGymClassRoutes); // Member Gym Class routes
-router.use("/payments", paymentRoutes); // Payment routes
+router.use("/payment", paymentRoutes); // Payment routes
 router.use("/class", gymClassRoutes); // Gym Class routes
 router.use("/login", loginRoutes); // loginRoutes
 router.use("/signup", signupRoutes); // Signup routes

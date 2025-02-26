@@ -83,28 +83,31 @@ const MembershipController = {
       res.status(200).json({ message: "Membership found.", membership });
     });
   },
-
   getMembershipDetails: (req, res) => {
-    const { userId } = req.body; // Get `userId` from request body
+    console.log("Full Query Parameters:", req.query); // Debugging step
 
-    if (!userId) {
+    const { userInfo } = req.query; // Extract `userInfo` from query params
+
+    console.log("Extracted userInfo:", userInfo);
+
+    if (!userInfo) {
       return res.status(400).json({ error: "User ID is required" });
     }
 
-    const query = "SELECT * FROM membership WHERE member_id = ?";
-
-    db.query(query, [userId], (err, results) => {
+    Membership.getMembershipInfo(userInfo, (err, membership) => {
       if (err) {
-        console.error("Error fetching membership data:", err);
-        return res.status(500).json({ error: "Internal server error" });
+        return res
+          .status(500)
+          .json({ message: "Error checking membership.", error: err });
       }
 
-      if (results.length === 0) {
-        return res.status(404).json({ error: "Membership not found" });
+      if (!membership) {
+        return res
+          .status(404)
+          .json({ message: "No membership found for this member." });
       }
 
-      const membershipDetails = results[0]; // Assuming there's only one result
-      res.json(membershipDetails); // Send membership data back to frontend
+      res.status(200).json({ message: "Membership found.", membership });
     });
   },
 

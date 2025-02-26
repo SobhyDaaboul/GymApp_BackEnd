@@ -4,6 +4,6 @@ const verifyToken = require("../middleware/Auth");
 const MembershipController = require("../controllers/membershipController");
 
 router.post("/create", verifyToken, MembershipController.createMembership);
-router.get("/", MembershipController.getMembershipDetails);
+router.get("/getMembershipInfo", MembershipController.getMembershipDetails);
 
 module.exports = router;

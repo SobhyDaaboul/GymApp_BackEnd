@@ -4,7 +4,7 @@ const db = require("../config/db");
 
 const Payment = {
   create: (paymentData, callback) => {
-    const sql = `INSERT INTO payments (amount, effectiveDate, expectedDate, membershipId, paymentMethodCode)
+    const sql = `INSERT INTO payment (amount, effectiveDate, expectedDate, membership_id, paymentmethodcode)
                  VALUES (?, ?, ?, ?, ?)`;
 
     db.query(
