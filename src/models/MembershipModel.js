@@ -3,7 +3,7 @@ const db = require("../config/db");
 const Membership = {
   create: (membershipData, callback) => {
     const sql =
-      "INSERT INTO membership (startDate,endDate,membershipType,cost,status,member_id)VALUES(?,?,?,?,?,?)";
+      "INSERT INTO membership (startDate, endDate, membershipType, cost, status, member_id) VALUES (?, ?, ?, ?, ?, ?)";
     db.query(
       sql,
       [
@@ -12,43 +12,66 @@ const Membership = {
         membershipData.membershipType,
         membershipData.cost,
         membershipData.status,
-        membershipData.membershipId,
+        membershipData.memberId, // Fixed incorrect reference from membershipId to memberId
       ],
       (err, result) => {
         if (err) {
-          console.error("Error inserting booking:", err);
-          return callback(err, null);
+          console.error("Error inserting membership:", err);
+          return callback && callback(err, null);
         }
-        callback(null, result); //new commit added
+        callback && callback(null, result);
       }
     );
   },
 
   checkMembership: (memberId, callback) => {
-    const sql = "SELECT member_id FROM membership WHERE member_id = ? ";
+    const sql = "SELECT member_id FROM membership WHERE member_id = ?";
     db.query(sql, [memberId], (err, rows) => {
       if (err) {
-        console.error("Error finding your Membership:", err);
-        return callback(err, null);
+        console.error("Error finding membership:", err);
+        return callback && callback(err, null);
       }
-      callback(null, rows[0]); // Return the first record (if exists)
+      callback && callback(null, rows[0] || null); // Ensuring callback is called properly
     });
-  }, //new
+  },
 
   getMembershipInfo: (id, callback) => {
     const query = "SELECT * FROM membership WHERE member_id = ?";
-
     db.query(query, [id], (err, result) => {
       if (err) {
-        console.error("Error inserting booking:", err);
-        return callback(err, null);
+        console.error("Error fetching membership:", err);
+        return callback && callback(err, null);
       }
-      callback(null, result); //new commit added
+      callback && callback(null, result);
     });
   },
 
   delete: (id, callback) => {
-    db.query("DELETE FROM membership WHERE idmembership = ?", [id], callback);
+    db.query(
+      "DELETE FROM membership WHERE idmembership = ?",
+      [id],
+      (err, result) => {
+        if (err) {
+          console.error("Error deleting membership:", err);
+          return callback && callback(err, null);
+        }
+        callback && callback(null, result);
+      }
+    );
+  },
+
+  getMembershipInfoo: (userId, callback) => {
+    db.query(
+      "SELECT startDate, endDate, membershipType, cost, status FROM membership WHERE member_id = ?",
+      [userId],
+      (err, rows) => {
+        if (err) {
+          console.error("Error fetching membership:", err);
+          return callback && callback(err, null);
+        }
+        callback && callback(null, rows.length > 0 ? rows[0] : null);
+      }
+    );
   },
 };
 

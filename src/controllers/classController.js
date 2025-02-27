@@ -12,6 +12,45 @@ const ClassController = {
     });
   },
 
+  fetchBookedClasses: async (req, res) => {
+    try {
+      // Extract user ID from the decoded token (done via middleware)
+      const userId = req.user.id; // Assuming `req.user` contains the decoded token
+
+      // Fetch booked classes based on the user ID
+      const classes = await GymClass.getBookedClasses(userId);
+
+      if (classes.length === 0) {
+        return res.status(404).json({ message: "No booked classes found." });
+      }
+
+      res.json(classes);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
+  // Fetch booked sessions for the user
+  fetchBookedSessions: async (req, res) => {
+    try {
+      // Extract user ID from the decoded token (done via middleware)
+      const userId = req.user.id; // Assuming `req.user` contains the decoded token
+
+      // Fetch booked sessions based on the user ID
+      const sessions = await GymClass.getBookedSessions(userId);
+
+      if (sessions.length === 0) {
+        return res.status(404).json({ message: "No booked sessions found." });
+      }
+
+      res.json(sessions);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
   //ANDRO
   deleteClass(req, res) {
     try {

@@ -111,6 +111,25 @@ const MembershipController = {
     });
   },
 
+  fetchMembership: async (req, res) => {
+    try {
+      // Extract user ID from JWT token (req.user is set by the JWT middleware)
+      const userId = req.user.id;
+
+      // Fetch membership info from the database
+      const membership = await Membership.getMembershipInfo(userId);
+
+      if (!membership) {
+        return res.status(404).json({ message: "No active membership found." });
+      }
+
+      res.json(membership);
+    } catch (error) {
+      console.error("Error fetching membership info:", error);
+      res.status(500).json({ error: "Internal server error" });
+    }
+  },
+
   // Delete a membership by ID
   deleteMembership: (req, res) => {
     const { id } = req.params;

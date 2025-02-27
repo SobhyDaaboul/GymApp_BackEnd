@@ -12,6 +12,23 @@ const GymClass = {
     db.query("INSERT INTO class SET ?", classData, callback);
   },
 
+  getBookedClasses: async (userId) => {
+    const [rows] = await pool.query(
+      "SELECT className, schedule, duration FROM class JOIN member_gymclass ON class.classCode = member_gymclass.class_code WHERE member_gymclass.member_id = ?",
+      [userId]
+    );
+    return rows;
+  },
+
+  getBookedSessions: async (userId) => {
+    const [rows] = await pool.query(
+      "SELECT e.sessionCode, e.name, e.schedule FROM employee e JOIN member_gymclass mg ON e.sessionCode = mg.class_code WHERE mg.member_id = ?",
+
+      [userId]
+    );
+    return rows;
+  },
+
   // ANDROID
   delete: (classCode, callback) => {
     const query = "DELETE FROM class WHERE classCode = ?";
